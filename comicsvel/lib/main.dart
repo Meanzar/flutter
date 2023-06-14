@@ -1,7 +1,10 @@
+// main.dart
+
 import 'package:flutter/material.dart';
 import './assets/api/config.dart';
-import './assets/components/appbar.dart';
-import './assets/components/navbar.dart';
+import 'assets/components/fixed/appbar.dart';
+import 'assets/components/fixed/navbar.dart';
+import './assets/components/main/charactercard.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -52,49 +55,12 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const SizedBox(height: 20),
-            const Text(
-              'Character Name:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             Expanded(
               child: ListView.builder(
                 itemCount: widget.characters.length,
                 itemBuilder: (context, index) {
                   final character = widget.characters[index];
-                  final characterName = character['name'];
-                  final characterDesc = character['description'];
-                  final comics = character['comics']['items'] as List<dynamic>;
-
-                  return ListTile(
-                    title: Text(
-                      characterName,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(characterDesc ?? 'Description not available'),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Comics:',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: comics
-                              .map<Widget>((comic) =>
-                                  Text(comic['name'] ?? 'Unknown Comic'))
-                              .toList(),
-                        ),
-                      ],
-                    ),
-                  );
+                  return CharacterCard(character: character);
                 },
               ),
             ),

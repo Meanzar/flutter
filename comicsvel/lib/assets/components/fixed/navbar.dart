@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../main.dart';
-import '../api/config.dart';
+import '../../../main.dart';
+import '../../api/config.dart';
 
 /// Flutter code sample for [NavigationBar].
 
