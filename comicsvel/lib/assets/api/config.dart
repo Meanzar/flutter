@@ -8,19 +8,20 @@ Future<dynamic> fetchData() async {
   final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
   final hash = generateMd5(timestamp + privateKey + publicKey);
 
-  final url =
+  final charactersurl =
       'https://gateway.marvel.com/v1/public/characters?apikey=$publicKey&ts=$timestamp&hash=$hash';
 
-  final response = await http.get(Uri.parse(url));
+  final charactersresponse = await http.get(Uri.parse(charactersurl));
 
   if (response.statusCode == 200) {
     final jsonData = jsonDecode(response.body);
     final characters = jsonData['data']['results'] as List<dynamic>;
     return characters;
   } else {
-    throw Exception('Failed to fetch data');
+    throw Exception('Failed to fetch characters data');
   }
 }
+
 
 String generateMd5(String input) {
   var bytes = utf8.encode(
