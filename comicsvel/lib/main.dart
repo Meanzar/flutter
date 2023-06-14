@@ -8,8 +8,8 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +20,18 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: FutureBuilder(
-        future: fetchData(), // Appel à la fonction fetchData()
+        future: fetchData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return const Text('Erreur lors du chargement des données');
           } else {
+            final characters = snapshot.data as List<dynamic>;
+
             return MyHomePage(
               title: 'Flutter Demo Home Page',
-              data: snapshot.data, // Données de l'API
+              characters: characters,
             );
           }
         },
@@ -39,24 +41,20 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.data});
+  const MyHomePage({
+    Key? key,
+    required this.title,
+    required this.characters,
+  }) : super(key: key);
 
   final String title;
-  final dynamic data;
+  final List<dynamic> characters;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,31 +66,35 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
             const SizedBox(height: 20),
             const Text(
-              'API Data:', // Titre pour les données de l'API
+              'Character Name:',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
-              widget.data.toString(), // Affiche les données de l'API
-            ),
+            Expanded(
+                child: ListView.builder(
+              itemCount: widget.characters.length,
+              itemBuilder: (context, index) {
+                final character = widget.characters[index];
+                final characterName = character['name'];
+                final characterDesc = character['description'];
+
+                return ListTile(
+                  title: Text(
+                    characterName,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  subtitle: characterDesc != null
+                      ? Text(characterDesc)
+                      : const Text('Description not available'),
+                );
+              },
+            )),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
