@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../main.dart';
 import '../../api/config.dart';
-
 /// Flutter code sample for [NavigationBar].
 
 void main() => runApp(const NavigationBarApp());
@@ -25,6 +24,42 @@ class NavigationExample extends StatefulWidget {
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
 
+  final pages = [
+    FutureBuilder(
+      future: fetchDataCharacters(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return const Text('Erreur lors du chargement des données');
+        } else {
+          final characters = snapshot.data as List<dynamic>;
+          return MyHomePage(
+            title: 'Comicsvel',
+            characters: characters,
+          );
+        }
+      },
+    ),
+    FutureBuilder(
+  future: fetchDataComics(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const CircularProgressIndicator();
+    } else if (snapshot.hasError) {
+      return const Text('Erreur lors du chargement des données');
+    } else {
+      final comics = snapshot.data as List<dynamic>;
+      return MyComicPage(
+        title: 'Comicsvel',
+        comics: comics,
+      );
+    }
+  },
+),
+   
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,38 +72,21 @@ class _NavigationExampleState extends State<NavigationExample> {
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            icon: Icon(Icons.explore),
-            label: 'Explore',
+            icon: Icon(Icons.face),
+            label: 'Personnages',
           ),
           NavigationDestination(
-            icon: Icon(Icons.commute),
-            label: 'Commute',
+            icon: Icon(Icons.auto_stories),
+            label: 'Comics',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.bookmark),
-            icon: Icon(Icons.bookmark_border),
-            label: 'Saved',
+            icon: Icon(Icons.movie),
+            label: 'Films',
           ),
         ],
       ),
-      body: <Widget>[
-        FutureBuilder(
-          future: fetchData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return const Text('Erreur lors du chargement des données');
-            } else {
-              final characters = snapshot.data as List<dynamic>;
-              return MyHomePage(
-                title: 'Flutter Demo Home Page',
-                characters: characters,
-              );
-            }
-          },
-        ),
-      ][currentPageIndex],
+      body: pages[currentPageIndex],
     );
   }
 }
+

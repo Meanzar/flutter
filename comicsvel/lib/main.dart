@@ -1,10 +1,12 @@
 // main.dart
 
 import 'package:flutter/material.dart';
-import './assets/api/config.dart';
+import 'assets/api/config.dart';
 import 'assets/components/fixed/appbar.dart';
 import 'assets/components/fixed/navbar.dart';
-import './assets/components/main/charactercard.dart'; 
+import 'assets/components/cartes/charactercard.dart'; 
+import 'assets/components/cartes/comiccard.dart'; 
+import 'assets/app_colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,9 +20,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Comicsvel',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        scaffoldBackgroundColor: AppColors.fondAppli,
         useMaterial3: true,
       ),
       home: const NavigationExample(),
@@ -61,6 +63,48 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemBuilder: (context, index) {
                   final character = widget.characters[index];
                   return CharacterCard(character: character);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class MyComicPage extends StatefulWidget {
+  const MyComicPage({
+    Key? key,
+    required this.title,
+    required this.comics,
+  }) : super(key: key);
+
+  final String title;
+  final List<dynamic> comics;
+
+  @override
+  State<MyComicPage> createState() => _MyComicPageState();
+}
+
+class _MyComicPageState extends State<MyComicPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
+        child: MarvelAppBar(title: widget.title), 
+        preferredSize: Size.fromHeight(kToolbarHeight)
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: widget.comics.length,
+                itemBuilder: (context, index) {
+                  final comic = widget.comics[index];
+                  return ComicCard(comic: comic);
                 },
               ),
             ),

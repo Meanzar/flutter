@@ -1,7 +1,5 @@
-// character_card.dart
-
 import 'package:flutter/material.dart';
-import '../../../characterdetails.dart';
+import '../../templates/characterdetails.dart';
 
 class CharacterCard extends StatelessWidget {
   final dynamic character;
@@ -14,7 +12,7 @@ class CharacterCard extends StatelessWidget {
     final characterDesc = character['description'];
     final comics = character['comics']['items'] as List<dynamic>;
     final characterThumbnail = character['thumbnail']['path'] + '.' + character['thumbnail']['extension'];
-
+    final screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -26,12 +24,24 @@ class CharacterCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network(
-                characterThumbnail,
-                height: 100,
-                width: 100,
+              Container(
+                constraints: BoxConstraints(
+                  minHeight: 100,
+                ),
+                width: screenWidth * 0.7, // Set the width to 70% of the screen width
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                child: ClipRect(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    heightFactor: 1,
+                    child: Image.network(
+                      characterThumbnail,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
               Text(
                 characterName,
@@ -41,21 +51,6 @@ class CharacterCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(characterDesc ?? 'Description not available'),
-              const SizedBox(height: 8),
-              const Text(
-                'Comics:',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: comics
-                    .map<Widget>((comic) => Text(comic['name'] ?? 'Unknown Comic'))
-                    .toList(),
-              ),
             ],
           ),
         ),
