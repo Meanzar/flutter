@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:crypto/crypto.dart';
-import 'package:http/http.dart' as http;
+import './assets/api/config.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -121,28 +120,3 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-Future<List<dynamic>> fetchData() async {
-  const publicKey = 'ecf339dd3245cb3e8f31267304392227';
-  const privateKey = '855da28f6b127779e85aec25ccb59d1aa1bc8d9e';
-  final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-  final hash = generateMd5(timestamp + privateKey + publicKey);
-  const int limit = 50;
-  final url =
-      'https://gateway.marvel.com/v1/public/characters?apikey=$publicKey&ts=$timestamp&hash=$hash&limit=$limit';
-
-  final response = await http.get(Uri.parse(url));
-
-  if (response.statusCode == 200) {
-    final jsonData = jsonDecode(response.body);
-    final characters = jsonData['data']['results'] as List<dynamic>;
-    return characters;
-  } else {
-    throw Exception('Failed to fetch data');
-  }
-}
-
-String generateMd5(String input) {
-  var bytes = utf8.encode(input);
-  var digest = md5.convert(bytes);
-  return digest.toString();
-}
