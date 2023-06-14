@@ -13,8 +13,8 @@ Future<dynamic> fetchData() async {
 
   final charactersresponse = await http.get(Uri.parse(charactersurl));
 
-  if (response.statusCode == 200) {
-    final jsonData = jsonDecode(response.body);
+  if (charactersresponse.statusCode == 200) {
+    final jsonData = jsonDecode(charactersresponse.body);
     final characters = jsonData['data']['results'] as List<dynamic>;
     return characters;
   } else {

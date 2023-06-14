@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import './assets/api/config.dart';
+import './assets/components/appbar.dart';
+import './assets/components/navbar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,22 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: FutureBuilder(
-        future: fetchData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return const Text('Erreur lors du chargement des données');
-          } else {
-            final characters = snapshot.data as List<dynamic>;
-            return MyHomePage(
-              title: 'Flutter Demo Home Page',
-              characters: characters,
-            );
-          }
-        },
-      ),
+      home: const NavigationExample(),
     );
   }
 }
@@ -56,9 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+      appBar: PreferredSize(
+        child: MarvelAppBar(title: widget.title), 
+        preferredSize: Size.fromHeight(kToolbarHeight)
       ),
       body: Center(
         child: Column(
