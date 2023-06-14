@@ -76,24 +76,44 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Expanded(
-                child: ListView.builder(
-              itemCount: widget.characters.length,
-              itemBuilder: (context, index) {
-                final character = widget.characters[index];
-                final characterName = character['name'];
-                final characterDesc = character['description'];
+              child: ListView.builder(
+                itemCount: widget.characters.length,
+                itemBuilder: (context, index) {
+                  final character = widget.characters[index];
+                  final characterName = character['name'];
+                  final characterDesc = character['description'];
+                  final comics = character['comics']['items'] as List<dynamic>;
 
-                return ListTile(
-                  title: Text(
-                    characterName,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  subtitle: characterDesc != null
-                      ? Text(characterDesc)
-                      : const Text('Description not available'),
-                );
-              },
-            )),
+                  return ListTile(
+                    title: Text(
+                      characterName,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(characterDesc ?? 'Description not available'),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Comics:',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: comics
+                              .map<Widget>((comic) =>
+                                  Text(comic['name'] ?? 'Unknown Comic'))
+                              .toList(),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
