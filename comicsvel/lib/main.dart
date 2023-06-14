@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           } else {
             final characters = snapshot.data as List<dynamic>;
             return MyHomePage(
-              title: 'Flutter Demo Home Page',
+              title: 'Comics',
               characters: characters,
             );
           }
