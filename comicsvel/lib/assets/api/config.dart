@@ -7,9 +7,10 @@ Future<dynamic> fetchData() async {
   const privateKey = '855da28f6b127779e85aec25ccb59d1aa1bc8d9e';
   final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
   final hash = generateMd5(timestamp + privateKey + publicKey);
+  const int limit = 50;
 
   final charactersurl =
-      'https://gateway.marvel.com/v1/public/characters?apikey=$publicKey&ts=$timestamp&hash=$hash';
+      'https://gateway.marvel.com/v1/public/characters?apikey=$publicKey&ts=$timestamp&hash=$hash&limit=$limit';
 
   final charactersresponse = await http.get(Uri.parse(charactersurl));
 

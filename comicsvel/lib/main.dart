@@ -79,7 +79,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   final character = widget.characters[index];
                   final characterName = character['name'];
                   final characterDesc = character['description'];
+                  final characterThumbnail = character['thumbnail']['path'] +
+                      '.' +
+                      character['thumbnail']['extension'];
                   final comics = character['comics']['items'] as List<dynamic>;
+                  print(comics);
 
                   return ListTile(
                     title: Text(
@@ -98,12 +102,45 @@ class _MyHomePageState extends State<MyHomePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        Image.network(
+                          characterThumbnail,
+                          height: 100,
+                          width: 100,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: comics
-                              .map<Widget>((comic) =>
-                                  Text(comic['name'] ?? 'Unknown Comic'))
-                              .toList(),
+                          children: comics.map<Widget>((comic) {
+                            final comicName = comic['name'] ?? 'Unknown Comic';
+                            final thumbnail = comic['thumbnail'];
+                            if (thumbnail != null &&
+                                thumbnail['path'] != null &&
+                                thumbnail['extension'] != null) {
+                              final thumbnailUrl =
+                                  '${thumbnail['path']}.${thumbnail['extension']}';
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (thumbnailUrl.isNotEmpty &&
+                                      thumbnailUrl != '.')
+                                    Image.network(
+                                      thumbnailUrl,
+                                      height: 100,
+                                      width: 100,
+                                    ),
+                                  Text(comicName),
+                                  const SizedBox(height: 8),
+                                ],
+                              );
+                            } else {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(comicName),
+                                  const SizedBox(height: 8),
+                                ],
+                              );
+                            }
+                          }).toList(),
                         ),
                       ],
                     ),
