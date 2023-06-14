@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import './assets/api/config.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -28,7 +27,6 @@ class MyApp extends StatelessWidget {
             return const Text('Erreur lors du chargement des données');
           } else {
             final characters = snapshot.data as List<dynamic>;
-
             return MyHomePage(
               title: 'Flutter Demo Home Page',
               characters: characters,
@@ -119,4 +117,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-

@@ -15,7 +15,8 @@ Future<dynamic> fetchData() async {
 
   if (response.statusCode == 200) {
     final jsonData = jsonDecode(response.body);
-    return jsonData;
+    final characters = jsonData['data']['results'] as List<dynamic>;
+    return characters;
   } else {
     throw Exception('Failed to fetch data');
   }
