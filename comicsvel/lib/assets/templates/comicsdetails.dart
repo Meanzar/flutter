@@ -13,7 +13,6 @@ class comicDetailPage extends StatelessWidget {
     final comicDesc = comic['description'];
     final comicPageCount = comic['pageCount'];
     final comicSeries = comic['series'];
-    final comics = comic['comics']['items'] as List<dynamic>;
     final comicThumbnail = comic['thumbnail']['path'] + '.' + comic['thumbnail']['extension'];
 
     return Scaffold(
@@ -49,12 +48,7 @@ class comicDetailPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: comics
-                  .map<Widget>((comic) => Text(comic['title'] ?? 'Unknown Comic'))
-                  .toList(),
-            ),
+            
           ],
         ),
       ),
