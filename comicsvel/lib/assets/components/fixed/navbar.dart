@@ -42,22 +42,21 @@ class _NavigationExampleState extends State<NavigationExample> {
       },
     ),
     FutureBuilder(
-  future: fetchDataComics(),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const CircularProgressIndicator();
-    } else if (snapshot.hasError) {
-      return const Text('Erreur lors du chargement des données');
-    } else {
-      final comics = snapshot.data as List<dynamic>;
-      return MyComicPage(
-        title: 'Comicsvel',
-        comics: comics,
-      );
-    }
-  },
-),
-   
+      future: fetchDataComics(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return const Text('Erreur lors du chargement des données');
+        } else {
+          final comics = snapshot.data as List<dynamic>;
+          return MyComicPage(
+            title: 'Comicsvel',
+            comics: comics,
+          );
+        }
+      },
+    ),
   ];
 
   @override
@@ -79,14 +78,9 @@ class _NavigationExampleState extends State<NavigationExample> {
             icon: Icon(Icons.auto_stories),
             label: 'Comics',
           ),
-          NavigationDestination(
-            icon: Icon(Icons.movie),
-            label: 'Films',
-          ),
         ],
       ),
       body: pages[currentPageIndex],
     );
   }
 }
-

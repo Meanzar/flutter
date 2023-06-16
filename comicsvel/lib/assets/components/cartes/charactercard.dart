@@ -4,7 +4,6 @@ import '../../app_colors.dart';
 
 class CharacterCard extends StatelessWidget {
   final dynamic character;
-
   const CharacterCard({Key? key, required this.character}) : super(key: key);
 
   @override
