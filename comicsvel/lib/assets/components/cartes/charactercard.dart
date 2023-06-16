@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../templates/characterdetails.dart';
+import '../../app_colors.dart';
 
 class CharacterCard extends StatelessWidget {
   final dynamic character;
@@ -21,6 +22,7 @@ class CharacterCard extends StatelessWidget {
         );
       },
       child: Card(
+        color: AppColors.fondClair,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(

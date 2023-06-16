@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../api/config.dart'; // Vous devrez créer cette page de détails pour les comics
 import '../../templates/comicsdetails.dart';
+import '../../app_colors.dart';
 
 class ComicCard extends StatelessWidget {
   final dynamic comic;
@@ -21,6 +22,7 @@ class ComicCard extends StatelessWidget {
         );
       },
       child: Card(
+        color: AppColors.fondClair,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
