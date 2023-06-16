@@ -4,16 +4,15 @@ import 'dart:convert';
 const publicKey = 'ecf339dd3245cb3e8f31267304392227';
 const privateKey = '855da28f6b127779e85aec25ccb59d1aa1bc8d9e';
 
+final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+final hash = generateMd5(timestamp + privateKey + publicKey);
+const int limit = 50;
+const baseurl = 'https://gateway.marvel.com/v1/public/';
+
 Future<dynamic> fetchDataCharacters() async {
-  final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-  final hash = generateMd5(timestamp + privateKey + publicKey);
-  const int limit = 50;
-
   final charactersurl =
-      'https://gateway.marvel.com/v1/public/characters?apikey=$publicKey&ts=$timestamp&hash=$hash&limit=$limit';
-
+      '$baseurl&characters?apikey=$publicKey&ts=$timestamp&hash=$hash&limit=$limit';
   final charactersresponse = await http.get(Uri.parse(charactersurl));
-
   if (charactersresponse.statusCode == 200) {
     final jsonData = jsonDecode(charactersresponse.body);
     final characters = jsonData['data']['results'] as List<dynamic>;
@@ -24,15 +23,9 @@ Future<dynamic> fetchDataCharacters() async {
 }
 
 Future<dynamic> fetchDataComics() async {
-  final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-  final hash = generateMd5(timestamp + privateKey + publicKey);
-  const int limit = 50;
-
   final comicssurl =
-      'https://gateway.marvel.com/v1/public/comics?apikey=$publicKey&ts=$timestamp&hash=$hash&limit=$limit';
-
+      '$baseurl&comics?apikey=$publicKey&ts=$timestamp&hash=$hash&limit=$limit';
   final comicsresponse = await http.get(Uri.parse(comicssurl));
-
   if (comicsresponse.statusCode == 200) {
     final jsonData = jsonDecode(comicsresponse.body);
     final comics = jsonData['data']['results'] as List<dynamic>;
