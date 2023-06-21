@@ -15,6 +15,11 @@ class ComicCard extends StatelessWidget {
     final comicThumbnail = comic['thumbnail']['path'] + '.' + comic['thumbnail']['extension'];
     final screenWidth = MediaQuery.of(context).size.width;
 
+    // If the description is "Description not available", return an empty Container
+    if (comicDesc == "") {
+      return Container();
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
