@@ -18,6 +18,7 @@ Future<dynamic> fetchDataCharacters() async {
     var characters = jsonData['data']['results'] as List<dynamic>;
    
     characters = characters.where((character) => character['description'].toString().isNotEmpty).toList();
+    print("Personnages reçus");
     return characters;
   } else {
     throw Exception('Failed to fetch characters data');
@@ -32,6 +33,7 @@ Future<dynamic> fetchDataComics() async {
     final jsonData = jsonDecode(comicsresponse.body);
     var comics = jsonData['data']['results'] as List<dynamic>;
     comics = comics.where((comics) => comics['description'].toString().isNotEmpty).toList();
+    print("Comics reçus");
     return comics;
   } else {
     throw Exception('Failed to fetch comics data');

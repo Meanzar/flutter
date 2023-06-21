@@ -1,67 +1,79 @@
 import 'package:flutter/material.dart';
-import '../../templates/comicsdetails.dart';
-import '../../app_colors.dart';
-import '../../api/config.dart';
-import '../cartes/comiccard.dart';
+import '../cartes/comiccard.dart'; 
 
-class SearchComicWidget extends StatefulWidget {
+class ComicSearchBar extends StatefulWidget {
   final List<dynamic> comics;
 
-  SearchComicWidget({required this.comics});
+  ComicSearchBar({required this.comics});
 
   @override
-  _SearchComicWidgetState createState() => _SearchComicWidgetState();
+  _ComicSearchBarState createState() => _ComicSearchBarState();
 }
 
-class _SearchComicWidgetState extends State<SearchComicWidget> {
+class _ComicSearchBarState extends State<ComicSearchBar> {
+  TextEditingController _searchController = TextEditingController();
   List<dynamic> _searchResults = [];
 
-  _searchComic(String searchString) {
-    _searchResults.clear();
-    if (searchString.isNotEmpty) {
+  @override
+  void initState() {
+    super.initState();
+    _searchResults = List.from(widget.comics); 
+    _searchController.addListener(() {
+      filterSearchResults(_searchController.text);
+    });
+  }
+
+
+  void filterSearchResults(String query) {
+    if(query.isNotEmpty) {
+      List<dynamic> tempSearchList = [];
       widget.comics.forEach((comic) {
-        if (comic['name'].toLowerCase().contains(searchString.toLowerCase()) ||
-            comic['description'].toLowerCase().contains(searchString.toLowerCase())) {
-          _searchResults.add(comic);
+        if(comic['title'].toLowerCase().contains(query.toLowerCase()) ||
+           comic['description'].toLowerCase().contains(query.toLowerCase())) {
+          tempSearchList.add(comic);
         }
       });
+      setState(() {
+        _searchResults.clear();
+        _searchResults.addAll(tempSearchList);
+      });
+      return;
+    } else {
+      setState(() {
+        _searchResults.clear();
+        _searchResults.addAll(widget.comics);
+      });
     }
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
-            onChanged: (value) {
-              _searchComic(value);
-            },
+            controller: _searchController,
             decoration: InputDecoration(
-              labelText: "Rechercher un comic",
-              hintText: "Rechercher un comic",
+              labelText: "Search",
+              hintText: "Search",
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(25.0),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(25.0)),
               ),
             ),
           ),
         ),
-        _searchResults.isNotEmpty
-            ? Expanded(
-                child: ListView.builder(
-                  itemCount: _searchResults.length,
-                  itemBuilder: (context, index) {
-                    final comic = _searchResults[index];
-                    return ComicCard(comic: comic);
-                  },
-                ),
-              )
-            : Container(),
+        const SizedBox(height: 20),
+        Expanded(
+          child: ListView.builder(
+            itemCount: _searchResults.length,
+            itemBuilder: (context, index) {
+              final comic = _searchResults[index];
+              return ComicCard(comic: comic);
+            },
+          ),
+        ),
       ],
     );
   }

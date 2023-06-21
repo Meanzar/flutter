@@ -14,6 +14,7 @@ class ComicCard extends StatelessWidget {
     final comicDesc = comic['description'];
     final comicThumbnail = comic['thumbnail']['path'] + '.' + comic['thumbnail']['extension'];
     final screenWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -41,6 +42,16 @@ class ComicCard extends StatelessWidget {
                     child: Image.network(
                       comicThumbnail,
                       fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),

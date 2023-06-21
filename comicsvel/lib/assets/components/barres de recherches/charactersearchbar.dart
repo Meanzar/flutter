@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
-import '../../templates/characterdetails.dart';
-import '../../app_colors.dart';
-import '../../api/config.dart';
-import '../cartes/charactercard.dart';
+import '../cartes/charactercard.dart'; 
 
-class CharactersSearchBar extends StatefulWidget {
-  const CharactersSearchBar({Key? key}) : super(key: key);
+class CharacterSearchBar extends StatefulWidget {
+  final List<dynamic> characters;
+
+  CharacterSearchBar({required this.characters});
 
   @override
-  _SearchBarState createState() => _SearchBarState();
+  _CharacterSearchBarState createState() => _CharacterSearchBarState();
 }
 
-class _SearchBarState extends State<CharactersSearchBar> {
+class _CharacterSearchBarState extends State<CharacterSearchBar> {
   TextEditingController _searchController = TextEditingController();
-  List<dynamic> _characters = [];
   List<dynamic> _searchResults = [];
 
   @override
   void initState() {
     super.initState();
-    fetchDataCharacters().then((characters) {
-      setState(() {
-        _characters = characters;
-      });
-    });
-
+    _searchResults = List.from(widget.characters); // Initialize search results with all characters
     _searchController.addListener(() {
       filterSearchResults(_searchController.text);
     });
@@ -33,13 +26,12 @@ class _SearchBarState extends State<CharactersSearchBar> {
   void filterSearchResults(String query) {
     if(query.isNotEmpty) {
       List<dynamic> tempSearchList = [];
-      _characters.forEach((character) {
+      widget.characters.forEach((character) {
         if(character['name'].toLowerCase().contains(query.toLowerCase()) ||
-          character['description'].toLowerCase().contains(query.toLowerCase())) {
+           character['description'].toLowerCase().contains(query.toLowerCase())) {
           tempSearchList.add(character);
         }
       });
-
       setState(() {
         _searchResults.clear();
         _searchResults.addAll(tempSearchList);
@@ -48,7 +40,7 @@ class _SearchBarState extends State<CharactersSearchBar> {
     } else {
       setState(() {
         _searchResults.clear();
-        _searchResults.addAll(_characters);
+        _searchResults.addAll(widget.characters);
       });
     }
   }
@@ -56,7 +48,7 @@ class _SearchBarState extends State<CharactersSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
@@ -71,11 +63,13 @@ class _SearchBarState extends State<CharactersSearchBar> {
             ),
           ),
         ),
+        const SizedBox(height: 20),
         Expanded(
           child: ListView.builder(
             itemCount: _searchResults.length,
             itemBuilder: (context, index) {
-              return CharacterCard(character: _searchResults[index]);
+              final character = _searchResults[index];
+              return CharacterCard(character: character);
             },
           ),
         ),

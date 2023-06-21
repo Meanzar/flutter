@@ -13,6 +13,7 @@ class CharacterCard extends StatelessWidget {
     final comics = character['comics']['items'] as List<dynamic>;
     final characterThumbnail = character['thumbnail']['path'] + '.' + character['thumbnail']['extension'];
     final screenWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -40,6 +41,16 @@ class CharacterCard extends StatelessWidget {
                     child: Image.network(
                       characterThumbnail,
                       fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
