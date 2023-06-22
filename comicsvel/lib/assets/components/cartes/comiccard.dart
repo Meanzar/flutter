@@ -16,7 +16,7 @@ class ComicCard extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // If the description is "Description not available", return an empty Container
-    if (comicDesc == "") {
+    if (comicDesc == null ) {
       return Container();
     }
 

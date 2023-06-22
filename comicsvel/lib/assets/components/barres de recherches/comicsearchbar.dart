@@ -26,13 +26,17 @@ class _ComicSearchBarState extends State<ComicSearchBar> {
 
   void filterSearchResults(String query) {
     if(query.isNotEmpty) {
+      print("recherche :" + query);
+
       List<dynamic> tempSearchList = [];
       widget.comics.forEach((comic) {
-        if(comic['title'].toLowerCase().contains(query.toLowerCase()) ||
-           comic['description'].toLowerCase().contains(query.toLowerCase())) {
+       if((comic['title'] != null && comic['title'].toLowerCase().contains(query.toLowerCase())) ||
+          (comic['description'] != null && comic['description'].toLowerCase().contains(query.toLowerCase()))) {
           tempSearchList.add(comic);
+          print("création de la liste filtrée");
         }
-      });
+      }
+      );
       setState(() {
         _searchResults.clear();
         _searchResults.addAll(tempSearchList);
